@@ -87,6 +87,7 @@ public enum Scoville {
     public static func registerDevice(
         token: String?,
         isProduction: Bool = true,
+        hasNotificationsEnabled: Bool = false,
         completion: (@Sendable (Result<Void, Error>) -> Void)? = nil
     ) {
         guard let config = configuration else {
@@ -111,7 +112,8 @@ public enum Scoville {
             version: config.version,
             build: config.build,
             bundle_id: config.bundleId,
-            production: isProduction
+            production: isProduction,
+            notificationsEnabled: hasNotificationsEnabled
         )
 
         // Run on background thread

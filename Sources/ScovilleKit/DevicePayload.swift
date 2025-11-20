@@ -16,4 +16,5 @@ struct DevicePayload: Codable, Sendable {
     let build: String
     let bundle_id: String
     let production: Bool
+    let notificationsEnabled: Bool
 }

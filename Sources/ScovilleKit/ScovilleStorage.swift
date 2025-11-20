@@ -18,6 +18,7 @@ final class ScovilleStorage {
         if let existing = defaults.string(forKey: key) {
             return existing
         }
+        print("[Scoville] No UUID found.. creating new UUID and saving for later usage.")
         let new = UUID().uuidString
         defaults.set(new, forKey: key)
         return new
