@@ -84,7 +84,7 @@ public enum Scoville {
         track(StandardEvent(eventName), parameters: parameters)
     }
     
-    func trackNotificationOpened(from response: UNNotificationResponse) {
+    public static func trackNotificationOpened(from response: UNNotificationResponse) {
         let userInfo = response.notification.request.content.userInfo
 
         if let notificationId = userInfo["notification_id"] as? String {
