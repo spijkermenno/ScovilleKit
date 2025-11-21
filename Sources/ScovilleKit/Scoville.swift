@@ -28,18 +28,6 @@ public enum Scoville {
             await ScovilleLogger.shared.success(.configuration, "Configured for \(info.bundleId) — version \(info.version) (\(info.build))")
         }
     }
-    
-    private func trackNotificationOpened(from response: UNNotificationResponse) {
-        let userInfo = response.notification.request.content.userInfo
-
-        if let notificationId = userInfo["notification_id"] as? String {
-            Task { @MainActor in
-                Scoville.track("notification_opened", parameters: ["notification_id": notificationId])
-            }
-        } else {
-            print("[Scoville] ❗️ notification_id missing in payload")
-        }
-    }
 
     public static func configureAPI(url: String) {
         Task {
@@ -94,6 +82,18 @@ public enum Scoville {
 
     public static func track(_ eventName: String, parameters: [String: Any] = [:]) {
         track(StandardEvent(eventName), parameters: parameters)
+    }
+    
+    func trackNotificationOpened(from response: UNNotificationResponse) {
+        let userInfo = response.notification.request.content.userInfo
+
+        if let notificationId = userInfo["notification_id"] as? String {
+            Task { @MainActor in
+                Scoville.track("notification_opened", parameters: ["notification_id": notificationId])
+            }
+        } else {
+            print("[Scoville] ❗️ notification_id missing in payload")
+        }
     }
 
     // MARK: - Device Registration
