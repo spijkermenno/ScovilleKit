@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 @MainActor
 public enum Scoville {
@@ -25,6 +26,18 @@ public enum Scoville {
 
         Task {
             await ScovilleLogger.shared.success(.configuration, "Configured for \(info.bundleId) — version \(info.version) (\(info.build))")
+        }
+    }
+    
+    private func trackNotificationOpened(from response: UNNotificationResponse) {
+        let userInfo = response.notification.request.content.userInfo
+
+        if let notificationId = userInfo["notification_id"] as? String {
+            Task { @MainActor in
+                Scoville.track("notification_opened", parameters: ["notification_id": notificationId])
+            }
+        } else {
+            print("[Scoville] ❗️ notification_id missing in payload")
         }
     }
 
